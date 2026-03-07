@@ -5,7 +5,30 @@ import { COUNTRY_COOKIE_NAME, COUNTRY_COOKIE_MAX_AGE } from "@/lib/constants"
 
 const { auth } = NextAuth(authConfig)
 
-export default auth((req) => {
+// Static fallback — used when API fetch fails (cold start, etc.)
+const FALLBACK_MAP: Record<string, string> = {
+  US: "usa",
+  DE: "germany",
+  TH: "thailand",
+  NZ: "new-zealand",
+}
+
+// Default country when nothing matches
+const DEFAULT_COUNTRY = "usa"
+
+async function getCountrySlugMap(baseUrl: string): Promise<Record<string, string>> {
+  try {
+    const res = await fetch(`${baseUrl}/api/geo`, {
+      next: { revalidate: 3600 },
+    })
+    if (res.ok) return await res.json()
+  } catch {
+    // API not available — use fallback
+  }
+  return FALLBACK_MAP
+}
+
+export default auth(async (req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
 
@@ -29,18 +52,12 @@ export default auth((req) => {
     // Try Vercel geolocation header
     const countryCode =
       req.headers.get("x-vercel-ip-country") ||
-      // Dev fallback: check custom header
       req.headers.get("x-dev-country")
 
     if (countryCode) {
-      // Map country codes to slugs (no DB call in middleware)
-      const countrySlugMap: Record<string, string> = {
-        US: "usa",
-        DE: "germany",
-        TH: "thailand",
-      }
+      const slugMap = await getCountrySlugMap(nextUrl.origin)
+      const slug = slugMap[countryCode.toUpperCase()]
 
-      const slug = countrySlugMap[countryCode.toUpperCase()]
       if (slug) {
         const response = NextResponse.redirect(new URL(`/${slug}`, nextUrl))
         response.cookies.set(COUNTRY_COOKIE_NAME, slug, {
@@ -51,9 +68,9 @@ export default auth((req) => {
       }
     }
 
-    // No country detected — redirect to default
-    const response = NextResponse.redirect(new URL("/usa", nextUrl))
-    response.cookies.set(COUNTRY_COOKIE_NAME, "usa", {
+    // No country detected or not in our list — redirect to default
+    const response = NextResponse.redirect(new URL(`/${DEFAULT_COUNTRY}`, nextUrl))
+    response.cookies.set(COUNTRY_COOKIE_NAME, DEFAULT_COUNTRY, {
       maxAge: COUNTRY_COOKIE_MAX_AGE,
       path: "/",
     })
