@@ -1,0 +1,389 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// Auth.js required models
+// ============================================
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================
+// Users & Roles
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  passwordHash  String?
+  name          String
+  nickname      String?   // Публичный никнейм, отображается на сайте вместо имени
+  image         String?
+  role          Role      @default(COUNTRY_ADMIN)
+
+  accounts        Account[]
+  countries       UserCountry[]
+  articles        Article[]
+  pendingChanges  PendingChange[] @relation("PendingAuthor")
+  reviewedChanges PendingChange[] @relation("PendingReviewer")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  SUPER_ADMIN
+  COUNTRY_ADMIN
+}
+
+model UserCountry {
+  userId    String
+  countryId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  country   Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
+
+  @@id([userId, countryId])
+}
+
+// ============================================
+// Geography
+// ============================================
+
+model Country {
+  id        String  @id @default(cuid())
+  name      String
+  nameIn    String  @default("") // предложный: "в Германии", "в США", "в Таиланде"
+  nameFor   String  @default("") // родительный: "для Германии", "для США", "для Таиланда"
+  slug      String  @unique
+  code      String  @unique // ISO 3166-1 alpha-2 (US, DE, etc.)
+  flag      String? // emoji flag
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  cities         City[]
+  admins         UserCountry[]
+  specialists    Specialist[]
+  articles       Article[]
+  usefulLinks    UsefulLink[]
+  advertisements Advertisement[]
+  pendingChanges PendingChange[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model City {
+  id        String @id @default(cuid())
+  name      String
+  slug      String
+  countryId String
+
+  country     Country      @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  specialists Specialist[]
+
+  createdAt DateTime @default(now())
+
+  @@unique([countryId, slug])
+  @@index([countryId])
+}
+
+// ============================================
+// Specialist Directory
+// ============================================
+
+model SpecialistCategory {
+  id        String @id @default(cuid())
+  name      String
+  slug      String @unique
+  icon      String? // Lucide icon name
+  sortOrder Int    @default(0)
+
+  specialists Specialist[]
+}
+
+model Specialist {
+  id          String  @id @default(cuid())
+  name        String
+  description String? @db.Text
+  phone       String?
+  email       String?
+  website     String?
+  address     String?
+  image       String? // URL to image
+  socialLinks Json?   // { facebook, instagram, telegram, ... }
+  languages   String[] @default(["ru"])
+
+  countryId  String
+  cityId     String?
+  categoryId String
+
+  country  Country            @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  city     City?              @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  category SpecialistCategory @relation(fields: [categoryId], references: [id])
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([countryId])
+  @@index([cityId])
+  @@index([categoryId])
+  @@index([isActive, countryId])
+}
+
+// ============================================
+// Articles
+// ============================================
+
+model ArticleCategory {
+  id   String @id @default(cuid())
+  name String
+  slug String @unique
+
+  articles Article[]
+}
+
+model Article {
+  id        String @id @default(cuid())
+  title     String
+  slug      String @unique
+  excerpt   String @db.Text
+  content   Json   // TipTap JSON
+  coverImage String?
+
+  type       ArticleType
+  countryId  String?
+  categoryId String
+  authorId   String
+  status     ArticleStatus       @default(DRAFT)
+  publishedAt DateTime?
+
+  attachmentsPosition AttachmentsPosition @default(TOP)
+
+  country     Country?        @relation(fields: [countryId], references: [id])
+  category    ArticleCategory @relation(fields: [categoryId], references: [id])
+  author      User            @relation(fields: [authorId], references: [id])
+  attachments ArticleAttachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([countryId])
+  @@index([categoryId])
+  @@index([status, countryId])
+  @@index([type, status])
+}
+
+enum ArticleType {
+  COUNTRY
+  GENERAL
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum AttachmentsPosition {
+  TOP
+  BOTTOM
+  BOTH
+}
+
+model ArticleAttachment {
+  id        String @id @default(cuid())
+  articleId String
+
+  label    String         // button text
+  type     AttachmentType
+  url      String         // R2 URL or external link
+  platform Platform?
+  fileSize Int?           // bytes
+  version  String?
+  sortOrder Int           @default(0)
+  downloads Int           @default(0)
+
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([articleId])
+}
+
+enum AttachmentType {
+  FILE
+  EXTERNAL_LINK
+}
+
+enum Platform {
+  ANDROID
+  IOS
+  WINDOWS
+  MACOS
+  LINUX
+  PDF
+  ZIP
+  OTHER
+}
+
+// ============================================
+// Useful Links
+// ============================================
+
+model LinkCategory {
+  id   String @id @default(cuid())
+  name String
+  slug String @unique
+
+  links UsefulLink[]
+}
+
+model UsefulLink {
+  id          String  @id @default(cuid())
+  title       String
+  url         String
+  description String?
+  icon        String? // URL to icon
+
+  countryId  String?
+  categoryId String
+  sortOrder  Int     @default(0)
+  isActive   Boolean @default(true)
+
+  country  Country?     @relation(fields: [countryId], references: [id])
+  category LinkCategory @relation(fields: [categoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([countryId])
+  @@index([categoryId])
+}
+
+// ============================================
+// Advertisements
+// ============================================
+
+model Advertisement {
+  id          String  @id @default(cuid())
+  title       String
+  imageUrl    String?
+  htmlContent String? @db.Text
+  targetUrl   String
+
+  slot      AdSlot
+  countryId String?
+
+  country Country? @relation(fields: [countryId], references: [id])
+
+  startsAt DateTime
+  endsAt   DateTime
+  isActive Boolean @default(true)
+
+  impressions Int @default(0)
+  clicks      Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slot, isActive])
+  @@index([countryId])
+}
+
+enum AdSlot {
+  HERO_BANNER
+  SIDEBAR
+}
+
+// ============================================
+// Moderation System
+// ============================================
+
+model PendingChange {
+  id         String       @id @default(cuid())
+  entityType EntityType
+  entityId   String?      // null for CREATE
+  action     ChangeAction
+
+  data          Json?    // proposed data snapshot
+  diff          Json?    // { field: { old, new } } for UI
+  status        ChangeStatus @default(PENDING)
+  reviewComment String?
+
+  authorId   String
+  reviewerId String?
+  countryId  String?
+
+  author   User     @relation("PendingAuthor", fields: [authorId], references: [id])
+  reviewer User?    @relation("PendingReviewer", fields: [reviewerId], references: [id])
+  country  Country? @relation(fields: [countryId], references: [id])
+
+  createdAt  DateTime  @default(now())
+  reviewedAt DateTime?
+
+  @@index([status])
+  @@index([entityType, status])
+  @@index([authorId])
+  @@index([countryId])
+}
+
+enum EntityType {
+  ARTICLE
+  SPECIALIST
+  USEFUL_LINK
+  ADVERTISEMENT
+}
+
+enum ChangeAction {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum ChangeStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ============================================
+// Site Settings (singleton)
+// ============================================
+
+model SiteSettings {
+  id        String   @id @default("singleton")
+  theme     String   @default("default") // "default" | "neobrutalism"
+  updatedAt DateTime @updatedAt
+}

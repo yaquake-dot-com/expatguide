@@ -1,26 +1,346 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-nunito-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.625rem;
+  /* Background & Surface */
+  --background: oklch(0.984 0.003 247.858);  /* #F8FAFC - slate-50 */
+  --foreground: oklch(0.279 0.041 260.031);  /* #1E293B - slate-800 */
+  /* Cards */
+  --card: oklch(1 0 0);                      /* #FFFFFF */
+  --card-foreground: oklch(0.279 0.041 260.031);
+  /* Popovers */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.279 0.041 260.031);
+  /* Primary - Deep Blue #1E40AF */
+  --primary: oklch(0.389 0.159 264.1);
+  --primary-foreground: oklch(0.985 0 0);
+  /* Secondary */
+  --secondary: oklch(0.968 0.007 247.896);   /* #F1F5F9 - slate-100 */
+  --secondary-foreground: oklch(0.279 0.041 260.031);
+  /* Muted */
+  --muted: oklch(0.968 0.007 247.896);
+  --muted-foreground: oklch(0.554 0.046 257.417); /* #64748B - slate-500 */
+  /* Accent - used for hover states */
+  --accent: oklch(0.929 0.013 255.508);       /* #E2E8F0 - slate-200 */
+  --accent-foreground: oklch(0.279 0.041 260.031);
+  /* Warning - Amber #F59E0B (CTA buttons) */
+  --warning: oklch(0.795 0.177 77.2);
+  --warning-foreground: oklch(0.279 0.041 260.031);
+  /* Success - Green #10B981 */
+  --success: oklch(0.765 0.177 163.223);
+  --success-foreground: oklch(1 0 0);
+  /* Destructive - Red #EF4444 */
+  --destructive: oklch(0.637 0.237 25.331);
+  /* Border & Input */
+  --border: oklch(0.929 0.013 255.508);       /* #E2E8F0 */
+  --input: oklch(0.929 0.013 255.508);
+  --ring: oklch(0.389 0.159 264.1);           /* Same as primary */
+  /* Charts */
+  --chart-1: oklch(0.389 0.159 264.1);
+  --chart-2: oklch(0.795 0.177 77.2);
+  --chart-3: oklch(0.765 0.177 163.223);
+  --chart-4: oklch(0.637 0.237 25.331);
+  --chart-5: oklch(0.554 0.046 257.417);
+  /* Sidebar */
+  --sidebar: oklch(0.33 0.12 264.1);         /* Dark blue sidebar */
+  --sidebar-foreground: oklch(0.95 0.01 264.1);
+  --sidebar-primary: oklch(0.795 0.177 77.2); /* Amber accent */
+  --sidebar-primary-foreground: oklch(0.279 0.041 260.031);
+  --sidebar-accent: oklch(0.36 0.13 264.1);
+  --sidebar-accent-foreground: oklch(0.95 0.01 264.1);
+  --sidebar-border: oklch(0.40 0.10 264.1);
+  --sidebar-ring: oklch(0.795 0.177 77.2);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), sans-serif;
+  }
+  /* Offset anchor scroll for sticky header (h-16 = 64px + 16px padding) */
+  [id]:is(h2, h3) {
+    scroll-margin-top: 80px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================
+   Neobrutalism Theme Overrides
+   ============================================ */
+
+[data-theme="neobrutalism"] {
+  --border: oklch(0.279 0.041 260.031);
+  --input: oklch(0.279 0.041 260.031);
+  --background: oklch(0.975 0.008 80);
+}
+
+/* Cards */
+[data-theme="neobrutalism"] [data-slot="card"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
+}
+
+/* Clickable cards (inside links) — hover & active */
+[data-theme="neobrutalism"] a > [data-slot="card"] {
+  transition: box-shadow 0.1s ease, transform 0.1s ease;
+}
+
+[data-theme="neobrutalism"] a > [data-slot="card"]:hover {
+  box-shadow: 2px 2px 0 0 oklch(0.279 0.041 260.031) !important;
+  transform: translate(2px, 2px);
+}
+
+[data-theme="neobrutalism"] a > [data-slot="card"]:active {
+  box-shadow: 0 0 0 0 oklch(0.279 0.041 260.031) !important;
+  transform: translate(4px, 4px);
+}
+
+/* Article images (prose content + cover), NOT card thumbnails */
+[data-theme="neobrutalism"] .prose img,
+[data-theme="neobrutalism"] article img,
+[data-theme="neobrutalism"] header + .relative img {
+  border: 2px solid oklch(0.279 0.041 260.031);
+  border-radius: 2px !important;
+}
+
+/* Article cover wrapper */
+[data-theme="neobrutalism"] header + .relative.overflow-hidden {
+  border-radius: 2px !important;
+}
+
+/* TOC block */
+[data-theme="neobrutalism"] nav:has(> ol) {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 2px !important;
+}
+
+/* Buttons */
+[data-theme="neobrutalism"] [data-slot="button"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 6px !important;
+  box-shadow: 3px 3px 0 0 oklch(0.279 0.041 260.031);
+  transition: box-shadow 0.1s ease, transform 0.1s ease;
+}
+
+[data-theme="neobrutalism"] [data-slot="button"]:hover {
+  box-shadow: 2px 2px 0 0 oklch(0.279 0.041 260.031);
+  transform: translate(1px, 1px);
+}
+
+[data-theme="neobrutalism"] [data-slot="button"]:active {
+  box-shadow: 0 0 0 0 oklch(0.279 0.041 260.031);
+  transform: translate(3px, 3px);
+}
+
+/* Ghost & link buttons — no heavy borders, but still squared */
+[data-theme="neobrutalism"] [data-slot="button"][data-variant="ghost"],
+[data-theme="neobrutalism"] [data-slot="button"][data-variant="link"] {
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  border-radius: 4px !important;
+}
+
+/* Badges */
+[data-theme="neobrutalism"] [data-slot="badge"] {
+  border: 1.5px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+  box-shadow: 1.5px 1.5px 0 0 oklch(0.279 0.041 260.031);
+}
+
+/* Inputs & Textareas */
+[data-theme="neobrutalism"] [data-slot="input"],
+[data-theme="neobrutalism"] [data-slot="textarea"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+}
+
+/* Select */
+[data-theme="neobrutalism"] [data-slot="select-trigger"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+}
+
+[data-theme="neobrutalism"] [data-slot="select-content"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
+}
+
+/* Dialogs & Sheets */
+[data-theme="neobrutalism"] [data-slot="dialog-content"],
+[data-theme="neobrutalism"] [data-slot="sheet-content"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 6px !important;
+  box-shadow: 6px 6px 0 0 oklch(0.279 0.041 260.031) !important;
+}
+
+/* Popovers & Dropdown menus */
+[data-theme="neobrutalism"] [data-slot="popover-content"],
+[data-theme="neobrutalism"] [data-slot="dropdown-menu-content"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
+}
+
+/* Switch */
+[data-theme="neobrutalism"] [data-slot="switch"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+}
+
+/* Checkbox */
+[data-theme="neobrutalism"] [data-slot="checkbox"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 2px !important;
+}
+
+/* Alert Dialog */
+[data-theme="neobrutalism"] [data-slot="alert-dialog-content"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 6px !important;
+  box-shadow: 6px 6px 0 0 oklch(0.279 0.041 260.031) !important;
+}
+
+/* Hero banner ads — wrapper + inner inline-styled div */
+[data-theme="neobrutalism"] [data-slot="ad-banner-hero"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
+  overflow: visible !important;
+}
+
+[data-theme="neobrutalism"] [data-slot="ad-banner-hero"] > div {
+  border-radius: 0 !important;
+}
+
+/* Useful links & attachment items (a.rounded-lg with border) */
+[data-theme="neobrutalism"] a.rounded-lg.border {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+  box-shadow: 3px 3px 0 0 oklch(0.279 0.041 260.031);
+  transition: box-shadow 0.1s ease, transform 0.1s ease, background-color 0.15s;
+}
+
+[data-theme="neobrutalism"] a.rounded-lg.border:hover {
+  box-shadow: 2px 2px 0 0 oklch(0.279 0.041 260.031);
+  transform: translate(1px, 1px);
+}
+
+/* Icon circles inside link items */
+[data-theme="neobrutalism"] a.rounded-lg.border .rounded-lg.bg-primary\/10 {
+  border: 1.5px solid oklch(0.279 0.041 260.031);
+  border-radius: 4px !important;
+}
+
+/* Stat counters on hero (white/10 bg blocks) */
+[data-theme="neobrutalism"] .rounded-xl.bg-white\/10 {
+  border: 2px solid rgba(255,255,255,0.3) !important;
+  border-radius: 4px !important;
+}
+
+/* ---- Inline-HTML ad CTA buttons ---- */
+/* Square off ALL rounded elements inside ads */
+[data-theme="neobrutalism"] [data-slot="ad-banner-hero"] [style*="border-radius"],
+[data-theme="neobrutalism"] [data-slot="ad-banner-sidebar"] [style*="border-radius"] {
+  border-radius: 4px !important;
+}
+
+/* Pill-shaped CTA buttons — add neobrutalism border & shadow */
+[data-theme="neobrutalism"] [data-slot="ad-banner-hero"] [style*="9999px"],
+[data-theme="neobrutalism"] [data-slot="ad-banner-sidebar"] [style*="9999px"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+  box-shadow: 2px 2px 0 0 oklch(0.279 0.041 260.031);
+}
+
+/* Sidebar ad card */
+[data-theme="neobrutalism"] [data-slot="ad-banner-sidebar"] [data-slot="card"] {
+  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-radius: 4px !important;
+  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
+}
+
+/* ---- Header & Footer ---- */
+[data-theme="neobrutalism"] header {
+  border-bottom: 2px solid oklch(0.279 0.041 260.031) !important;
+}
+
+[data-theme="neobrutalism"] footer {
+  border-top: 2px solid oklch(0.279 0.041 260.031) !important;
+}
+
+/* Nav links — sharper radius */
+[data-theme="neobrutalism"] header nav a,
+[data-theme="neobrutalism"] footer nav a {
+  border-radius: 4px !important;
+}
+
+/* Desktop nav active-looking hover */
+[data-theme="neobrutalism"] header nav a:hover,
+[data-theme="neobrutalism"] footer nav a:hover {
+  border-color: oklch(0.279 0.041 260.031);
+}
+
+/* Country selector trigger */
+[data-theme="neobrutalism"] [data-slot="dropdown-menu-trigger"][data-slot="button"] {
+  border-radius: 4px !important;
 }

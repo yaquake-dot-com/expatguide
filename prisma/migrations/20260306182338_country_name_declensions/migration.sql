@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Country" ADD COLUMN     "nameFor" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "nameIn" TEXT NOT NULL DEFAULT '';
