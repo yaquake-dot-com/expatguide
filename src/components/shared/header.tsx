@@ -82,7 +82,7 @@ export async function Header({ countrySlug }: HeaderProps) {
 
         {/* Right side: Country selector + Search + Mobile menu */}
         <div className="flex items-center gap-1">
-          <CountrySelector countries={countries} currentSlug={countrySlug} />
+          <CountrySelector countries={countries} currentSlug={countrySlug} isNeobrutalism={isNeobrutalism} />
 
           {/* Mobile burger menu */}
           <Sheet>

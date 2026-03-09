@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { cn } from "@/lib/utils"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,9 +23,10 @@ interface Country {
 interface CountrySelectorProps {
   countries: Country[]
   currentSlug?: string
+  isNeobrutalism?: boolean
 }
 
-export function CountrySelector({ countries, currentSlug }: CountrySelectorProps) {
+export function CountrySelector({ countries, currentSlug, isNeobrutalism }: CountrySelectorProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [selected, setSelected] = useState(currentSlug || "")
@@ -60,7 +62,14 @@ export function CountrySelector({ countries, currentSlug }: CountrySelectorProps
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-1.5">
+        <Button
+          variant={isNeobrutalism ? "outline" : "ghost"}
+          size="sm"
+          className={cn(
+            "gap-1.5",
+            isNeobrutalism && "bg-sidebar-primary/20 hover:bg-sidebar-primary/30 border-sidebar-primary/50 text-sidebar-accent-foreground"
+          )}
+        >
           {currentCountry ? (
             <>
               <span>{currentCountry.flag}</span>
