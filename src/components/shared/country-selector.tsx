@@ -67,7 +67,7 @@ export function CountrySelector({ countries, currentSlug, isNeobrutalism }: Coun
           size="sm"
           className={cn(
             "gap-1.5",
-            isNeobrutalism && "bg-sidebar-primary/20 hover:bg-sidebar-primary/30 border-sidebar-primary/50 text-sidebar-accent-foreground"
+            isNeobrutalism && "border-amber-700 bg-amber-600/20 text-amber-950 hover:bg-amber-600/30"
           )}
         >
           {currentCountry ? (
