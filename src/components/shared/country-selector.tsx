@@ -63,12 +63,9 @@ export function CountrySelector({ countries, currentSlug, isNeobrutalism }: Coun
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant={isNeobrutalism ? "outline" : "ghost"}
+          variant={isNeobrutalism ? "secondary" : "ghost"}
           size="sm"
-          className={cn(
-            "gap-1.5",
-            isNeobrutalism && "border-amber-700 bg-amber-600/20 text-amber-950 hover:bg-amber-600/30"
-          )}
+          className="gap-1.5"
         >
           {currentCountry ? (
             <>
