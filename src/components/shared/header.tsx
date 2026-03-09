@@ -6,6 +6,8 @@ import { CountrySelector } from "./country-selector"
 import { NAV_ITEMS, SITE_NAME } from "@/lib/constants"
 import { db } from "@/lib/db"
 import { getSiteSettings } from "@/actions/settings"
+import { getTheme } from "@/lib/theme"
+import { cn } from "@/lib/utils"
 
 async function getCountries() {
   return db.country.findMany({
@@ -23,6 +25,8 @@ export async function Header({ countrySlug }: HeaderProps) {
   const countries = await getCountries()
   const settings = await getSiteSettings()
   const siteName = settings.siteName || SITE_NAME
+  const theme = await getTheme()
+  const isNeobrutalism = theme === "neobrutalism"
 
   const homeItem = { label: "Главная", href: countrySlug ? `/${countrySlug}` : "/" }
   const navItems = [
@@ -34,14 +38,26 @@ export async function Header({ countrySlug }: HeaderProps) {
   ]
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-white">
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b",
+        isNeobrutalism
+          ? "border-sidebar-border bg-sidebar text-sidebar-foreground"
+          : "border-border bg-white"
+      )}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <Link
           href={countrySlug ? `/${countrySlug}` : "/"}
           className="flex items-center gap-2"
         >
-          <span className="text-xl font-bold text-primary font-heading">
+          <span
+            className={cn(
+              "text-xl font-bold font-heading",
+              isNeobrutalism ? "text-sidebar-primary" : "text-primary"
+            )}
+          >
             {siteName}
           </span>
         </Link>
@@ -52,7 +68,12 @@ export async function Header({ countrySlug }: HeaderProps) {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
+              className={cn(
+                "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                isNeobrutalism
+                  ? "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
+                  : "text-foreground/80 hover:bg-accent hover:text-foreground"
+              )}
             >
               {item.label}
             </Link>
@@ -77,7 +98,12 @@ export async function Header({ countrySlug }: HeaderProps) {
                   <SheetClose key={item.href} asChild>
                     <Link
                       href={item.href}
-                      className="rounded-md px-3 py-3 text-base font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
+                      className={cn(
+                        "rounded-md px-3 py-3 text-base font-medium transition-colors",
+                        isNeobrutalism
+                          ? "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
+                          : "text-foreground/80 hover:bg-accent hover:text-foreground"
+                      )}
                     >
                       {item.label}
                     </Link>
