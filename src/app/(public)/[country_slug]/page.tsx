@@ -120,10 +120,11 @@ export default async function CountryPage({ params }: CountryPageProps) {
               alt=""
               fill
               sizes="100vw"
+              quality={85}
               className="object-cover"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/30" />
           </>
         )}
         <div className="relative mx-auto max-w-7xl px-4 py-10 md:py-14">
