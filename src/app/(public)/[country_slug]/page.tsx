@@ -53,7 +53,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
     await Promise.all([
       db.article.findMany({
         where: { countryId: country.id, status: "PUBLISHED", type: "COUNTRY" },
-        orderBy: { publishedAt: "desc" },
+        orderBy: { updatedAt: "desc" },
         take: 6,
         include: {
           category: { select: { name: true } },
@@ -62,7 +62,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
       }),
       db.article.findMany({
         where: { status: "PUBLISHED", type: "GENERAL" },
-        orderBy: { publishedAt: "desc" },
+        orderBy: { updatedAt: "desc" },
         take: 6,
         include: { category: { select: { name: true } } },
       }),
@@ -174,7 +174,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
             {countryArticles.length > 0 ? (
               <Carousel autoplay slideSize="basis-full sm:basis-1/2 lg:basis-1/3">
                 {countryArticles.map((a) => (
-                  <ArticleCard key={a.id} title={a.title} slug={a.slug} excerpt={a.excerpt} coverImage={a.coverImage} categoryName={a.category.name} countrySlug={country_slug} publishedAt={a.publishedAt} />
+                  <ArticleCard key={a.id} title={a.title} slug={a.slug} excerpt={a.excerpt} coverImage={a.coverImage} categoryName={a.category.name} countrySlug={country_slug} publishedAt={a.publishedAt} updatedAt={a.updatedAt} />
                 ))}
               </Carousel>
             ) : (
@@ -188,7 +188,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
             {generalArticles.length > 0 ? (
               <Carousel autoplay slideSize="basis-full sm:basis-1/2 lg:basis-1/3">
                 {generalArticles.map((a) => (
-                  <ArticleCard key={a.id} title={a.title} slug={a.slug} excerpt={a.excerpt} coverImage={a.coverImage} categoryName={a.category.name} countrySlug={country_slug} publishedAt={a.publishedAt} />
+                  <ArticleCard key={a.id} title={a.title} slug={a.slug} excerpt={a.excerpt} coverImage={a.coverImage} categoryName={a.category.name} countrySlug={country_slug} publishedAt={a.publishedAt} updatedAt={a.updatedAt} />
                 ))}
               </Carousel>
             ) : (

@@ -17,6 +17,7 @@ interface ArticleCardProps {
   countryFlag?: string | null
   countrySlug: string
   publishedAt: Date | string | null
+  updatedAt?: Date | string | null
   className?: string
 }
 
@@ -30,12 +31,18 @@ export function ArticleCard({
   countryFlag,
   countrySlug,
   publishedAt,
+  updatedAt,
   className,
 }: ArticleCardProps) {
   const href = `/${countrySlug}/articles/${slug}`
   const date = publishedAt
     ? typeof publishedAt === "string" ? new Date(publishedAt) : publishedAt
     : null
+  const updated = updatedAt
+    ? typeof updatedAt === "string" ? new Date(updatedAt) : updatedAt
+    : null
+  // Show "обновлено" if updatedAt is at least 1 day newer than publishedAt
+  const showUpdated = date && updated && (updated.getTime() - date.getTime()) > 86400000
 
   return (
     <Link href={href} className={cn("group block h-full", className)}>
@@ -80,7 +87,10 @@ export function ArticleCard({
             {date && (
               <span className="flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
-                {format(date, "d MMM yyyy", { locale: ru })}
+                {showUpdated
+                  ? `обновлено ${format(updated, "d MMM yyyy", { locale: ru })}`
+                  : format(date, "d MMM yyyy", { locale: ru })
+                }
               </span>
             )}
           </div>

@@ -71,7 +71,7 @@ export default async function ArticlesPage({ params, searchParams }: Props) {
   const [articles, total] = await Promise.all([
     db.article.findMany({
       where,
-      orderBy: { publishedAt: "desc" },
+      orderBy: { updatedAt: "desc" },
       skip: (page - 1) * ITEMS_PER_PAGE,
       take: ITEMS_PER_PAGE,
       include: {
@@ -187,6 +187,7 @@ export default async function ArticlesPage({ params, searchParams }: Props) {
                 countryName={a.country?.name}
                 countryFlag={a.country?.flag}
                 publishedAt={a.publishedAt}
+                updatedAt={a.updatedAt}
               />
             ))}
           </div>

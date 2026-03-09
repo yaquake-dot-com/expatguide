@@ -31,8 +31,10 @@ import {
   Undo,
   Redo,
   Minus,
+  Maximize2,
+  Minimize2,
 } from "lucide-react"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { toast } from "sonner"
 import {
   Dialog,
@@ -55,6 +57,8 @@ export function TipTapEditor({
   onChange,
   placeholder = "Начните писать статью...",
 }: TipTapEditorProps) {
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -86,19 +90,59 @@ export function TipTapEditor({
     },
   })
 
+  // Escape key exits fullscreen
+  useEffect(() => {
+    if (!isFullscreen) return
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsFullscreen(false)
+    }
+    document.addEventListener("keydown", handleEsc)
+    return () => document.removeEventListener("keydown", handleEsc)
+  }, [isFullscreen])
+
+  // Lock body scroll in fullscreen
+  useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => { document.body.style.overflow = "" }
+  }, [isFullscreen])
+
   if (!editor) return null
 
   return (
-    <div className="rounded-lg border bg-white">
-      <EditorToolbar editor={editor} />
-      <EditorContent editor={editor} />
+    <div
+      className={
+        isFullscreen
+          ? "fixed inset-0 z-50 flex flex-col bg-white"
+          : "rounded-lg border bg-white"
+      }
+    >
+      <EditorToolbar
+        editor={editor}
+        isFullscreen={isFullscreen}
+        onToggleFullscreen={() => setIsFullscreen((f) => !f)}
+      />
+      <div className={isFullscreen ? "flex-1 overflow-y-auto" : ""}>
+        <EditorContent editor={editor} />
+      </div>
     </div>
   )
 }
 
-function EditorToolbar({ editor }: { editor: Editor }) {
+function EditorToolbar({
+  editor,
+  isFullscreen,
+  onToggleFullscreen,
+}: {
+  editor: Editor
+  isFullscreen: boolean
+  onToggleFullscreen: () => void
+}) {
   return (
-    <div className="flex flex-wrap items-center gap-0.5 border-b p-1">
+    <div className="sticky top-0 z-10 flex flex-wrap items-center gap-0.5 border-b bg-white p-1">
       {/* Undo/Redo */}
       <Toggle
         size="sm"
@@ -247,6 +291,21 @@ function EditorToolbar({ editor }: { editor: Editor }) {
       {/* Link & Image */}
       <LinkDialog editor={editor} />
       <ImageDialog editor={editor} />
+
+      <div className="ml-auto">
+        <Toggle
+          size="sm"
+          pressed={isFullscreen}
+          onPressedChange={onToggleFullscreen}
+          title={isFullscreen ? "Свернуть (Esc)" : "На весь экран"}
+        >
+          {isFullscreen ? (
+            <Minimize2 className="h-4 w-4" />
+          ) : (
+            <Maximize2 className="h-4 w-4" />
+          )}
+        </Toggle>
+      </div>
     </div>
   )
 }

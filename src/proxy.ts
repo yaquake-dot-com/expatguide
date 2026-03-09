@@ -5,14 +5,6 @@ import { COUNTRY_COOKIE_NAME, COUNTRY_COOKIE_MAX_AGE } from "@/lib/constants"
 
 const { auth } = NextAuth(authConfig)
 
-// Static fallback — used when API fetch fails (cold start, etc.)
-const FALLBACK_MAP: Record<string, string> = {
-  US: "usa",
-  DE: "germany",
-  TH: "thailand",
-  NZ: "new-zealand",
-}
-
 // Default country when nothing matches
 const DEFAULT_COUNTRY = "usa"
 
@@ -23,9 +15,10 @@ async function getCountrySlugMap(baseUrl: string): Promise<Record<string, string
     })
     if (res.ok) return await res.json()
   } catch {
-    // API not available — use fallback
+    // API not available
   }
-  return FALLBACK_MAP
+  // Always return empty map instead of fallback — forces redirect to DEFAULT_COUNTRY
+  return {}
 }
 
 export default auth(async (req) => {

@@ -211,6 +211,12 @@ export default async function ArticlePage({ params }: Props) {
               {format(new Date(article.publishedAt), "d MMMM yyyy", { locale: ru })}
             </span>
           )}
+          {article.publishedAt && article.updatedAt &&
+            (new Date(article.updatedAt).getTime() - new Date(article.publishedAt).getTime()) > 86400000 && (
+            <span className="flex items-center gap-1 text-primary">
+              обновлено {format(new Date(article.updatedAt), "d MMMM yyyy", { locale: ru })}
+            </span>
+          )}
         </div>
 
         <hr className="mt-6 border-border" />
@@ -263,6 +269,7 @@ export default async function ArticlePage({ params }: Props) {
                 countryName={a.country?.name}
                 countryFlag={a.country?.flag}
                 publishedAt={a.publishedAt}
+                updatedAt={a.updatedAt}
               />
             ))}
           </div>
