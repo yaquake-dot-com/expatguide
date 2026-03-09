@@ -4,6 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
 import { SITE_NAME } from "@/lib/constants"
+import { getSiteSettings } from "@/actions/settings"
 import { ArticleCard } from "@/components/shared/article-card"
 import { SectionHeader } from "@/components/shared/section-header"
 import { Badge } from "@/components/ui/badge"
@@ -41,6 +42,9 @@ export default async function CountryPage({ params }: CountryPageProps) {
     where: { slug: country_slug, isActive: true },
   })
   if (!country) notFound()
+
+  const settings = await getSiteSettings()
+  const siteName = settings.siteName || SITE_NAME
 
   const inName = country.nameIn || `в ${country.name}`
   const forName = country.nameFor || `для ${country.name}`
@@ -99,7 +103,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: SITE_NAME,
+    name: siteName,
     url: `${process.env.NEXT_PUBLIC_APP_URL || ""}/${country_slug}`,
     description: `Справочник специалистов, статьи и полезные ссылки для русскоязычных ${inName}`,
   }

@@ -386,5 +386,6 @@ enum ChangeStatus {
 model SiteSettings {
   id        String   @id @default("singleton")
   theme     String   @default("default") // "default" | "neobrutalism"
+  siteName  String   @default("Переехали")
   updatedAt DateTime @updatedAt
 }

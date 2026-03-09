@@ -5,12 +5,14 @@ import { useAction } from "next-safe-action/hooks"
 import { toast } from "sonner"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Loader2, Check } from "lucide-react"
-import { updateTheme } from "@/actions/settings"
+import { updateTheme, updateSiteName } from "@/actions/settings"
 import type { ThemeName } from "@/lib/theme"
 
 interface Props {
   currentTheme: ThemeName
+  currentSiteName: string
 }
 
 const themes: { id: ThemeName; name: string; description: string; preview: React.ReactNode }[] = [
@@ -48,10 +50,11 @@ const themes: { id: ThemeName; name: string; description: string; preview: React
   },
 ]
 
-export function ThemeSettingsForm({ currentTheme }: Props) {
+export function ThemeSettingsForm({ currentTheme, currentSiteName }: Props) {
   const [selected, setSelected] = useState<ThemeName>(currentTheme)
+  const [siteName, setSiteName] = useState(currentSiteName)
 
-  const { execute, isPending } = useAction(updateTheme, {
+  const { execute: executeTheme, isPending: isThemePending } = useAction(updateTheme, {
     onSuccess: () => {
       toast.success("Тема обновлена")
       // Force full reload to apply CSS changes
@@ -62,10 +65,60 @@ export function ThemeSettingsForm({ currentTheme }: Props) {
     },
   })
 
-  const hasChanges = selected !== currentTheme
+  const { execute: executeSiteName, isPending: isSiteNamePending } = useAction(updateSiteName, {
+    onSuccess: () => {
+      toast.success("Название сайта обновлено")
+    },
+    onError: (e) => {
+      toast.error(e.error.serverError || "Ошибка при обновлении названия")
+    },
+  })
+
+  const themeHasChanges = selected !== currentTheme
+  const siteNameHasChanges = siteName !== currentSiteName && siteName.trim().length > 0
 
   return (
     <div className="space-y-6">
+      {/* Название сайта */}
+      <div>
+        <h2 className="text-lg font-semibold font-heading">Название сайта</h2>
+        <p className="text-sm text-muted-foreground">
+          Изменить название, которое отображается в шапке и мета-тегах
+        </p>
+        
+        <div className="mt-4 space-y-3">
+          <Input
+            value={siteName}
+            onChange={(e) => setSiteName(e.target.value)}
+            placeholder="Введите название сайта"
+            maxLength={100}
+            className="max-w-md"
+          />
+          <p className="text-xs text-muted-foreground">
+            {siteName.length}/100 символов
+          </p>
+          
+          {siteNameHasChanges && (
+            <div className="flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <p className="flex-1 text-sm">
+                Название сайта будет изменено на <strong>"{siteName}"</strong>
+              </p>
+              <Button
+                onClick={() => executeSiteName({ siteName: siteName.trim() })}
+                disabled={isSiteNamePending}
+                size="sm"
+              >
+                {isSiteNamePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Применить
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <hr />
+
+      {/* Тема оформления */}
       <div>
         <h2 className="text-lg font-semibold font-heading">Тема оформления</h2>
         <p className="text-sm text-muted-foreground">
@@ -109,14 +162,14 @@ export function ThemeSettingsForm({ currentTheme }: Props) {
         ))}
       </div>
 
-      {hasChanges && (
+      {themeHasChanges && (
         <div className="flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4">
           <p className="flex-1 text-sm">
             Тема будет изменена на <strong>{themes.find((t) => t.id === selected)?.name}</strong>.
             Изменения вступят в силу сразу для всех посетителей.
           </p>
-          <Button onClick={() => execute({ theme: selected })} disabled={isPending}>
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button onClick={() => executeTheme({ theme: selected })} disabled={isThemePending}>
+            {isThemePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Применить
           </Button>
         </div>

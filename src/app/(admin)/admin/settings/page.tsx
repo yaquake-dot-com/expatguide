@@ -8,7 +8,10 @@ export default async function SettingsPage() {
   return (
     <div>
       <PageHeader title="Настройки сайта" />
-      <ThemeSettingsForm currentTheme={settings.theme as "default" | "neobrutalism"} />
+      <ThemeSettingsForm
+        currentTheme={settings.theme as "default" | "neobrutalism"}
+        currentSiteName={settings.siteName}
+      />
     </div>
   )
 }

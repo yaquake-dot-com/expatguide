@@ -3,14 +3,14 @@
 import { revalidatePath } from "next/cache"
 import { db } from "@/lib/db"
 import { superAdminActionClient } from "@/lib/safe-action"
-import { updateThemeSchema } from "@/lib/validators/settings"
+import { updateThemeSchema, updateSiteNameSchema } from "@/lib/validators/settings"
 import { invalidateThemeCache } from "@/lib/theme"
 
 export const getSiteSettings = async () => {
   const settings = await db.siteSettings.findUnique({
     where: { id: "singleton" },
   })
-  return settings ?? { id: "singleton", theme: "default" as string, updatedAt: new Date() }
+  return settings ?? { id: "singleton", theme: "default" as string, siteName: "Переехали", updatedAt: new Date() }
 }
 
 export const updateTheme = superAdminActionClient
@@ -23,6 +23,20 @@ export const updateTheme = superAdminActionClient
     })
 
     invalidateThemeCache()
+    revalidatePath("/", "layout")
+
+    return settings
+  })
+
+export const updateSiteName = superAdminActionClient
+  .schema(updateSiteNameSchema)
+  .action(async ({ parsedInput }) => {
+    const settings = await db.siteSettings.upsert({
+      where: { id: "singleton" },
+      update: { siteName: parsedInput.siteName },
+      create: { id: "singleton", siteName: parsedInput.siteName },
+    })
+
     revalidatePath("/", "layout")
 
     return settings

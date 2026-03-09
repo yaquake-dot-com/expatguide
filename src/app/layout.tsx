@@ -3,6 +3,7 @@ import { Inter, Nunito_Sans } from "next/font/google"
 import { Providers } from "@/components/providers"
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants"
 import { getTheme } from "@/lib/theme"
+import { getSiteSettings } from "@/actions/settings"
 import "./globals.css"
 
 const inter = Inter({
@@ -15,21 +16,26 @@ const nunitoSans = Nunito_Sans({
   subsets: ["latin", "cyrillic"],
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://pereehali.com"),
-  title: {
-    default: SITE_NAME,
-    template: `%s | ${SITE_NAME}`,
-  },
-  description: SITE_DESCRIPTION,
-  openGraph: {
-    siteName: SITE_NAME,
-    locale: "ru_RU",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  const siteName = settings.siteName || SITE_NAME
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://pereehali.com"),
+    title: {
+      default: siteName,
+      template: `%s | ${siteName}`,
+    },
+    description: SITE_DESCRIPTION,
+    openGraph: {
+      siteName: siteName,
+      locale: "ru_RU",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
+  }
 }
 
 export default async function RootLayout({

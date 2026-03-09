@@ -1,11 +1,14 @@
 import Link from "next/link"
 import { SITE_NAME, NAV_ITEMS } from "@/lib/constants"
+import { getSiteSettings } from "@/actions/settings"
 
 interface FooterProps {
   countrySlug?: string
 }
 
-export function Footer({ countrySlug }: FooterProps) {
+export async function Footer({ countrySlug }: FooterProps) {
+  const settings = await getSiteSettings()
+  const siteName = settings.siteName || SITE_NAME
   const currentYear = new Date().getFullYear()
   const prefix = countrySlug ? `/${countrySlug}` : ""
 
@@ -25,7 +28,7 @@ export function Footer({ countrySlug }: FooterProps) {
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex items-center gap-2">
             <Link href={`${prefix}/`} className="text-lg font-bold text-primary font-heading">
-              {SITE_NAME}
+              {siteName}
             </Link>
           </div>
 
@@ -42,7 +45,7 @@ export function Footer({ countrySlug }: FooterProps) {
           </nav>
 
           <p className="text-sm text-muted-foreground">
-            &copy; {currentYear} {SITE_NAME}
+            &copy; {currentYear} {siteName}
           </p>
         </div>
 
