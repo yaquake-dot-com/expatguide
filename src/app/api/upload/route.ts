@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
-import { writeFile, mkdir } from "fs/promises"
-import { join } from "path"
-import { randomUUID } from "crypto"
+import { uploadFile } from "@/lib/storage"
 
 export async function POST(request: NextRequest) {
   const session = await auth()
@@ -35,31 +33,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "File type not allowed" }, { status: 400 })
     }
 
-    const isLocal = process.env.STORAGE_PROVIDER !== "r2"
+    const buffer = Buffer.from(await file.arrayBuffer())
+    const url = await uploadFile(buffer, file.name, "general")
+    const filename = file.name
 
-    if (isLocal) {
-      // Local storage
-      const ext = file.name.split(".").pop() || "bin"
-      const filename = `${randomUUID()}.${ext}`
-      const uploadDir = join(process.cwd(), "public", "uploads")
-
-      // Ensure directory exists
-      await mkdir(uploadDir, { recursive: true })
-
-      const buffer = Buffer.from(await file.arrayBuffer())
-      const filepath = join(uploadDir, filename)
-      await writeFile(filepath, buffer)
-
-      const url = `/api/uploads/${filename}`
-      return NextResponse.json({ url, filename })
-    }
-
-    // R2 upload would go here (Phase 8 / production)
-    // For now, fall back to local
-    return NextResponse.json({ error: "R2 not configured" }, { status: 500 })
+    return NextResponse.json({ url, filename })
 
   } catch (error) {
     console.error("Upload error:", error)
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 })
+    const message = error instanceof Error ? error.message : "Upload failed"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
