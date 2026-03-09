@@ -24,7 +24,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
       <WhatsappShareButton url={url} title={title}>
         <WhatsappIcon size={32} round />
       </WhatsappShareButton>
-      <FacebookShareButton url={url} hashtag="#expatguide">
+      <FacebookShareButton url={url} hashtag="#переехали">
         <FacebookIcon size={32} round />
       </FacebookShareButton>
     </div>

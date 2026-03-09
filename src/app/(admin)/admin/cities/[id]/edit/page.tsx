@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { CityForm } from "@/components/admin/cities/city-form"
 import { getCityById } from "@/actions/cities"
 import { getUserCountryScope } from "@/lib/safe-action"
@@ -29,6 +30,7 @@ export default async function EditCityPage({ params }: EditCityPageProps) {
 
   return (
     <div>
+      <BreadcrumbSetter id={city.id} label={city.name} />
       <PageHeader title={`Редактировать: ${city.name}`} />
       <CityForm
         countries={countries}

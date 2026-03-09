@@ -97,7 +97,7 @@ export function AdminSidebar({ role, pendingCount = 0 }: AdminSidebarProps) {
       {/* Logo */}
       <div className="flex h-14 items-center px-4">
         <Link href="/admin" className="text-lg font-bold font-heading text-sidebar-primary">
-          ExpatGuide
+          Переехали
         </Link>
       </div>
       <Separator className="bg-sidebar-border" />

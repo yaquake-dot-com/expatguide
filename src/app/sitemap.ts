@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next"
 import { db } from "@/lib/db"
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://expatguide.com"
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://pereehali.com"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const countries = await db.country.findMany({

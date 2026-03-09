@@ -1,6 +1,7 @@
 import { db } from "@/lib/db"
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import type { Metadata } from "next"
 import { SITE_NAME } from "@/lib/constants"
 import { ArticleCard } from "@/components/shared/article-card"
@@ -107,14 +108,27 @@ export default async function CountryPage({ params }: CountryPageProps) {
     <>
       <JsonLd data={websiteJsonLd} />
       {/* Hero — full width */}
-      <section className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
-        <div className="mx-auto max-w-7xl px-4 py-10 md:py-14">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
+        {country.heroImage && (
+          <>
+            <Image
+              src={country.heroImage}
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/40" />
+          </>
+        )}
+        <div className="relative mx-auto max-w-7xl px-4 py-10 md:py-14">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
               <h1 className="mb-3 text-3xl font-bold font-heading md:text-4xl lg:text-5xl">
                 {country.flag} Русский гид {inName}
               </h1>
-              <p className="text-lg text-primary-foreground/80">
+              <p className={`text-lg ${country.heroImage ? "text-white/80" : "text-primary-foreground/80"}`}>
                 Справочник специалистов, полезные статьи и ссылки для русскоязычных
               </p>
             </div>
@@ -126,7 +140,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
               ].map((s) => (
                 <div key={s.label} className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                   <p className="text-2xl font-bold">{s.value}</p>
-                  <p className="text-xs text-primary-foreground/70">{s.label}</p>
+                  <p className={`text-xs ${country.heroImage ? "text-white/70" : "text-primary-foreground/70"}`}>{s.label}</p>
                 </div>
               ))}
             </div>

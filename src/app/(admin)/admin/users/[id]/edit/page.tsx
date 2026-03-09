@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { UserForm } from "@/components/admin/users/user-form"
 import { getUserById } from "@/actions/users"
 import { db } from "@/lib/db"
@@ -18,6 +19,7 @@ export default async function EditUserPage({ params }: Props) {
 
   return (
     <div>
+      <BreadcrumbSetter id={user.id} label={user.name} />
       <PageHeader title={`Редактировать: ${user.name}`} />
       <UserForm
         countries={countries}

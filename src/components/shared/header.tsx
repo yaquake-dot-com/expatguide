@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { CountrySelector } from "./country-selector"
 import { NAV_ITEMS, SITE_NAME } from "@/lib/constants"
 import { db } from "@/lib/db"
@@ -68,15 +68,17 @@ export async function Header({ countrySlug }: HeaderProps) {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-72">
-              <nav className="mt-8 flex flex-col gap-1">
+              <SheetTitle className="sr-only">Меню</SheetTitle>
+              <nav className="mt-12 flex flex-col gap-1">
                 {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="rounded-md px-3 py-3 text-base font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
-                  >
-                    {item.label}
-                  </Link>
+                  <SheetClose key={item.href} asChild>
+                    <Link
+                      href={item.href}
+                      className="rounded-md px-3 py-3 text-base font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
+                    >
+                      {item.label}
+                    </Link>
+                  </SheetClose>
                 ))}
               </nav>
             </SheetContent>

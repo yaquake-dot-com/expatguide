@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
 import { CountryForm } from "@/components/admin/countries/country-form"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { getCountryById } from "@/actions/countries"
 
 interface EditCountryPageProps {
@@ -17,6 +18,7 @@ export default async function EditCountryPage({ params }: EditCountryPageProps) 
 
   return (
     <div>
+      <BreadcrumbSetter id={country.id} label={country.name} />
       <PageHeader title={`Редактировать: ${country.name}`} />
       <CountryForm
         initialData={{
@@ -27,6 +29,7 @@ export default async function EditCountryPage({ params }: EditCountryPageProps) 
           slug: country.slug,
           code: country.code,
           flag: country.flag,
+          heroImage: country.heroImage,
           isActive: country.isActive,
           sortOrder: country.sortOrder,
         }}

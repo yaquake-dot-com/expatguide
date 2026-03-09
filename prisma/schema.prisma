@@ -87,6 +87,7 @@ model Country {
   slug      String  @unique
   code      String  @unique // ISO 3166-1 alpha-2 (US, DE, etc.)
   flag      String? // emoji flag
+  heroImage String? // background image for hero section
   isActive  Boolean @default(true)
   sortOrder Int     @default(0)
 

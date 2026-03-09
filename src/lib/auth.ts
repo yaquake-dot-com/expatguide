@@ -66,7 +66,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             secure: false,
             tls: { rejectUnauthorized: false },
           },
-      from: process.env.EMAIL_FROM || "noreply@expatguide.local",
+      from: process.env.EMAIL_FROM || "noreply@pereehali.local",
     }),
   ],
   callbacks: {

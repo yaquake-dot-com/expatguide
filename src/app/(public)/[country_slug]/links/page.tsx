@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { EmptyState } from "@/components/shared/empty-state"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { ExternalLink, Link2 } from "lucide-react"
 import Link from "next/link"
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
@@ -113,25 +113,23 @@ export default async function LinksPage({ params, searchParams }: Props) {
       </div>
 
       {totalLinks > 0 ? (
-        <div className="space-y-8">
+        <div className="space-y-6">
           {filteredCategories.map((cat) => (
             <Card key={cat.id}>
-              <CardHeader>
-                <CardTitle className="text-lg">{cat.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <CardContent className="p-5">
+                <h2 className="mb-4 text-lg font-bold font-heading">{cat.name}</h2>
+                <div className="divide-y divide-border">
                   {cat.links.map((link) => (
                     <a
                       key={link.id}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-start gap-3 rounded-lg border p-3 transition-colors hover:bg-accent"
+                      className="group flex items-center gap-3 py-3 first:pt-0 last:pb-0"
                     >
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
                         {link.icon ? (
-                          <img src={link.icon} alt="" className="h-6 w-6" />
+                          <img src={link.icon} alt="" className="h-5 w-5" />
                         ) : (
                           <ExternalLink className="h-4 w-4 text-primary" />
                         )}
@@ -141,16 +139,16 @@ export default async function LinksPage({ params, searchParams }: Props) {
                           {link.title}
                         </p>
                         {link.description && (
-                          <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
+                          <p className="mt-0.5 text-sm text-muted-foreground">
                             {link.description}
                           </p>
                         )}
-                        {link.country && (
-                          <span className="mt-1 inline-block text-xs text-muted-foreground">
-                            {link.country.flag} {link.country.name}
-                          </span>
-                        )}
                       </div>
+                      {link.country && (
+                        <span className="shrink-0 text-xs text-muted-foreground">
+                          {link.country.flag} {link.country.name}
+                        </span>
+                      )}
                     </a>
                   ))}
                 </div>

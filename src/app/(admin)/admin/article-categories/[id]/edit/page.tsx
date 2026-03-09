@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { ArticleCategoryForm } from "@/components/admin/article-categories/article-category-form"
 import { getArticleCategoryById } from "@/actions/article-categories"
 
@@ -15,6 +16,7 @@ export default async function EditArticleCategoryPage({ params }: EditArticleCat
 
   return (
     <div>
+      <BreadcrumbSetter id={category.id} label={category.name} />
       <PageHeader title={`Редактировать: ${category.name}`} />
       <ArticleCategoryForm
         initialData={{

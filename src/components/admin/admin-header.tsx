@@ -6,6 +6,7 @@ import { ChevronRight, Home, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { AdminSidebar } from "./admin-sidebar"
+import { useBreadcrumbLabels } from "./breadcrumb-context"
 
 interface AdminHeaderProps {
   userName: string
@@ -34,11 +35,12 @@ const breadcrumbMap: Record<string, string> = {
 
 export function AdminHeader({ userName, nickname, role, pendingCount }: AdminHeaderProps) {
   const pathname = usePathname()
+  const { labels } = useBreadcrumbLabels()
 
   const segments = pathname.split("/").filter(Boolean)
   const breadcrumbs = segments.map((segment, index) => {
     const href = "/" + segments.slice(0, index + 1).join("/")
-    const label = breadcrumbMap[segment] || segment
+    const label = breadcrumbMap[segment] || labels[segment] || segment
     return { href, label }
   })
 

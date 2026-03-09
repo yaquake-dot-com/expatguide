@@ -38,7 +38,7 @@ export function ArticleCard({
     : null
 
   return (
-    <Link href={href} className={cn("group block", className)}>
+    <Link href={href} className={cn("group block h-full", className)}>
       <Card className="h-full gap-0 overflow-hidden py-0 transition-shadow hover:shadow-md">
         {/* Cover image */}
         <div className="relative aspect-[16/9] w-full overflow-hidden">

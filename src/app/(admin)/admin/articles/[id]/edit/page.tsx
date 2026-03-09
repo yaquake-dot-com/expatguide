@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { ArticleForm } from "@/components/admin/articles/article-form"
 import { AttachmentManager } from "@/components/admin/articles/attachment-manager"
 import { getArticleById } from "@/actions/articles"
@@ -34,6 +35,7 @@ export default async function EditArticlePage({ params }: EditArticlePageProps) 
 
   return (
     <div className="space-y-6">
+      <BreadcrumbSetter id={article.id} label={article.title} />
       <PageHeader title={`Редактировать: ${article.title}`} />
       <ArticleForm
         countries={countries}

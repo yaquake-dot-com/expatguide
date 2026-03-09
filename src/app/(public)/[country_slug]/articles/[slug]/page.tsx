@@ -65,36 +65,53 @@ export default async function ArticlePage({ params }: Props) {
 
   if (!article) notFound()
 
-  // Related articles — same category first, then fill with recent
-  const sameCategory = await db.article.findMany({
+  // Related articles — same country first, then general, then any
+  const relatedInclude = {
+    category: { select: { name: true } },
+    country: { select: { name: true, flag: true, slug: true } },
+  } as const
+
+  // 1. Same country + same category
+  let related = await db.article.findMany({
     where: {
       status: "PUBLISHED",
+      countryId: article.countryId,
       categoryId: article.categoryId,
       id: { not: article.id },
     },
     orderBy: { publishedAt: "desc" },
     take: 3,
-    include: {
-      category: { select: { name: true } },
-      country: { select: { name: true, flag: true, slug: true } },
-    },
+    include: relatedInclude,
   })
 
-  let related = sameCategory
-  // If not enough from same category, fill with other recent articles
+  // 2. Same country, any category
+  if (related.length < 3) {
+    const excludeIds = [article.id, ...related.map((a) => a.id)]
+    const filler = await db.article.findMany({
+      where: {
+        status: "PUBLISHED",
+        countryId: article.countryId,
+        id: { notIn: excludeIds },
+      },
+      orderBy: { publishedAt: "desc" },
+      take: 3 - related.length,
+      include: relatedInclude,
+    })
+    related = [...related, ...filler]
+  }
+
+  // 3. General articles (no country) or any remaining
   if (related.length < 3) {
     const excludeIds = [article.id, ...related.map((a) => a.id)]
     const filler = await db.article.findMany({
       where: {
         status: "PUBLISHED",
         id: { notIn: excludeIds },
+        OR: [{ countryId: null }, { type: "GENERAL" }],
       },
       orderBy: { publishedAt: "desc" },
       take: 3 - related.length,
-      include: {
-        category: { select: { name: true } },
-        country: { select: { name: true, flag: true, slug: true } },
-      },
+      include: relatedInclude,
     })
     related = [...related, ...filler]
   }
@@ -146,7 +163,7 @@ export default async function ArticlePage({ params }: Props) {
     author: { "@type": "Person", name: article.author.nickname || article.author.name },
     ...(article.publishedAt ? { datePublished: article.publishedAt.toISOString() } : {}),
     dateModified: article.updatedAt.toISOString(),
-    publisher: { "@type": "Organization", name: "ExpatGuide" },
+    publisher: { "@type": "Organization", name: "Переехали" },
     url: `${baseUrl}/${country_slug}/articles/${slug}`,
     ...(article.coverImage ? { image: article.coverImage } : {}),
   }
@@ -172,7 +189,7 @@ export default async function ArticlePage({ params }: Props) {
             )}
           </div>
           <ShareButtons
-            url={`${process.env.NEXT_PUBLIC_URL || ""}/${country_slug}/articles/${slug}`}
+            url={`${baseUrl}/${country_slug}/articles/${slug}`}
             title={article.title}
           />
         </div>

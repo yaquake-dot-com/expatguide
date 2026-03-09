@@ -50,9 +50,9 @@ export function Carousel({
   }, [emblaApi, onSelect])
 
   return (
-    <div className={cn("group relative", className)}>
+    <div className={cn("group/carousel relative", className)}>
       <div ref={emblaRef} className="overflow-hidden">
-        <div className="-ml-4 flex pb-2">
+        <div className="-ml-4 flex items-stretch pb-2">
           {Array.isArray(children)
             ? children.map((child, i) => (
                 <div key={i} className={cn("min-w-0 shrink-0 pl-4", slideSize)}>
@@ -68,7 +68,7 @@ export function Carousel({
         <Button
           variant="outline"
           size="icon"
-          className="absolute -left-3 top-1/2 z-10 h-8 w-8 -translate-y-1/2 rounded-full opacity-0 shadow-md transition-opacity group-hover:opacity-100"
+          className="absolute -left-3 top-1/2 z-10 h-8 w-8 -translate-y-1/2 rounded-full opacity-0 shadow-md transition-opacity group-hover/carousel:opacity-100"
           onClick={() => emblaApi?.scrollPrev()}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -78,7 +78,7 @@ export function Carousel({
         <Button
           variant="outline"
           size="icon"
-          className="absolute -right-3 top-1/2 z-10 h-8 w-8 -translate-y-1/2 rounded-full opacity-0 shadow-md transition-opacity group-hover:opacity-100"
+          className="absolute -right-3 top-1/2 z-10 h-8 w-8 -translate-y-1/2 rounded-full opacity-0 shadow-md transition-opacity group-hover/carousel:opacity-100"
           onClick={() => emblaApi?.scrollNext()}
         >
           <ChevronRight className="h-4 w-4" />

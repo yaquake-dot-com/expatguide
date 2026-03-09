@@ -7,6 +7,7 @@ export const countrySchema = z.object({
   slug: z.string().min(1, "Slug обязателен").regex(/^[a-z0-9-]+$/, "Только латиница, цифры и дефис"),
   code: z.string().min(2, "Код обязателен").max(2, "Код — 2 символа").regex(/^[A-Z]+$/, "Только заглавные латинские буквы"),
   flag: z.string().optional().nullable(),
+  heroImage: z.string().optional().nullable(),
   isActive: z.boolean(),
   sortOrder: z.number().int(),
 })
@@ -22,6 +23,7 @@ export const countryActionSchema = z.object({
   slug: z.string().min(1, "Slug обязателен").regex(/^[a-z0-9-]+$/, "Только латиница, цифры и дефис"),
   code: z.string().min(2, "Код обязателен").max(2, "Код — 2 символа").regex(/^[A-Z]+$/, "Только заглавные латинские буквы"),
   flag: z.string().optional().nullable(),
+  heroImage: z.string().optional().nullable(),
   isActive: z.boolean(),
   sortOrder: z.coerce.number().int(),
 })

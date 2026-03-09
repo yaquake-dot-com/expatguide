@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
 import { AdminHeader } from "@/components/admin/admin-header"
 import { db } from "@/lib/db"
+import { BreadcrumbProvider } from "@/components/admin/breadcrumb-context"
 
 export default async function AdminLayout({
   children,
@@ -28,29 +29,31 @@ export default async function AdminLayout({
   ])
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:block">
-        <AdminSidebar
-          role={session.user.role}
-          pendingCount={pendingCount}
-        />
-      </aside>
+    <BreadcrumbProvider>
+      <div className="flex h-screen overflow-hidden bg-background">
+        {/* Desktop sidebar */}
+        <aside className="hidden lg:block">
+          <AdminSidebar
+            role={session.user.role}
+            pendingCount={pendingCount}
+          />
+        </aside>
 
-      {/* Main content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <AdminHeader
-          userName={session.user.name || session.user.email || "Админ"}
-          nickname={dbUser?.nickname || session.user.nickname}
-          role={session.user.role}
-          pendingCount={pendingCount}
-        />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          {children}
-        </main>
+        {/* Main content */}
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <AdminHeader
+            userName={session.user.name || session.user.email || "Админ"}
+            nickname={dbUser?.nickname || session.user.nickname}
+            role={session.user.role}
+            pendingCount={pendingCount}
+          />
+          <main className="flex-1 overflow-y-auto p-4 md:p-6">
+            {children}
+          </main>
+        </div>
+
+        <Toaster position="top-right" richColors />
       </div>
-
-      <Toaster position="top-right" richColors />
-    </div>
+    </BreadcrumbProvider>
   )
 }

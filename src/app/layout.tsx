@@ -16,7 +16,7 @@ const nunitoSans = Nunito_Sans({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://expatguide.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://pereehali.com"),
   title: {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,

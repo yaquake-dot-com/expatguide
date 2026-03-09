@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { LinkCategoryForm } from "@/components/admin/link-categories/link-category-form"
 import { getLinkCategoryById } from "@/actions/link-categories"
 
@@ -12,6 +13,7 @@ export default async function EditLinkCategoryPage({ params }: Props) {
 
   return (
     <div>
+      <BreadcrumbSetter id={category.id} label={category.name} />
       <PageHeader title={`Редактировать: ${category.name}`} />
       <LinkCategoryForm initialData={{ id: category.id, name: category.name, slug: category.slug }} />
     </div>

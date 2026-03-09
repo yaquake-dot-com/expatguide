@@ -58,28 +58,28 @@
   --radius: 0.625rem;
   /* Background & Surface */
   --background: oklch(0.984 0.003 247.858);  /* #F8FAFC - slate-50 */
-  --foreground: oklch(0.279 0.041 260.031);  /* #1E293B - slate-800 */
+  --foreground: oklch(0.279 0.037 260.0);  /* #1E293B - slate-800 */
   /* Cards */
   --card: oklch(1 0 0);                      /* #FFFFFF */
-  --card-foreground: oklch(0.279 0.041 260.031);
+  --card-foreground: oklch(0.279 0.037 260.0);
   /* Popovers */
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.279 0.041 260.031);
+  --popover-foreground: oklch(0.279 0.037 260.0);
   /* Primary - Deep Blue #1E40AF */
   --primary: oklch(0.389 0.159 264.1);
   --primary-foreground: oklch(0.985 0 0);
   /* Secondary */
   --secondary: oklch(0.968 0.007 247.896);   /* #F1F5F9 - slate-100 */
-  --secondary-foreground: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.279 0.037 260.0);
   /* Muted */
   --muted: oklch(0.968 0.007 247.896);
   --muted-foreground: oklch(0.554 0.046 257.417); /* #64748B - slate-500 */
   /* Accent - used for hover states */
   --accent: oklch(0.929 0.013 255.508);       /* #E2E8F0 - slate-200 */
-  --accent-foreground: oklch(0.279 0.041 260.031);
+  --accent-foreground: oklch(0.279 0.037 260.0);
   /* Warning - Amber #F59E0B (CTA buttons) */
   --warning: oklch(0.795 0.177 77.2);
-  --warning-foreground: oklch(0.279 0.041 260.031);
+  --warning-foreground: oklch(0.279 0.037 260.0);
   /* Success - Green #10B981 */
   --success: oklch(0.765 0.177 163.223);
   --success-foreground: oklch(1 0 0);
@@ -99,7 +99,7 @@
   --sidebar: oklch(0.33 0.12 264.1);         /* Dark blue sidebar */
   --sidebar-foreground: oklch(0.95 0.01 264.1);
   --sidebar-primary: oklch(0.795 0.177 77.2); /* Amber accent */
-  --sidebar-primary-foreground: oklch(0.279 0.041 260.031);
+  --sidebar-primary-foreground: oklch(0.279 0.037 260.0);
   --sidebar-accent: oklch(0.36 0.13 264.1);
   --sidebar-accent-foreground: oklch(0.95 0.01 264.1);
   --sidebar-border: oklch(0.40 0.10 264.1);
@@ -127,16 +127,40 @@
    ============================================ */
 
 [data-theme="neobrutalism"] {
-  --border: oklch(0.279 0.041 260.031);
-  --input: oklch(0.279 0.041 260.031);
-  --background: oklch(0.975 0.008 80);
+  --background: oklch(0.9554 0.0252 99.6);     /* #F4F1DE sand */
+  --foreground: oklch(0.2972 0 0);              /* #2D2D2D charcoal */
+  --card: oklch(1 0 0);                         /* white */
+  --card-foreground: oklch(0.2972 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2972 0 0);
+  --primary: oklch(0.6878 0.1331 35.8);         /* #E07A5F coral */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.93 0.02 99);
+  --secondary-foreground: oklch(0.2972 0 0);
+  --muted: oklch(0.92 0.015 99);
+  --muted-foreground: oklch(0.50 0 0);
+  --accent: oklch(0.93 0.02 99);
+  --accent-foreground: oklch(0.2972 0 0);
+  --destructive: oklch(0.637 0.237 25.331);
+  --border: oklch(0.36 0 0);                    /* #3D3D3D */
+  --input: oklch(0.36 0 0);
+  --ring: oklch(0.6878 0.1331 35.8);            /* coral */
+  --radius: 0px;                                /* sharp corners */
+  --sidebar: oklch(0.2972 0 0);
+  --sidebar-foreground: oklch(0.9554 0.0252 99.6);
+  --sidebar-primary: oklch(0.6878 0.1331 35.8);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.36 0 0);
+  --sidebar-accent-foreground: oklch(0.9554 0.0252 99.6);
+  --sidebar-border: oklch(0.44 0 0);
+  --sidebar-ring: oklch(0.6878 0.1331 35.8);
 }
 
 /* Cards */
 [data-theme="neobrutalism"] [data-slot="card"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
-  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 0 var(--border) !important;
 }
 
 /* Clickable cards (inside links) — hover & active */
@@ -145,12 +169,12 @@
 }
 
 [data-theme="neobrutalism"] a > [data-slot="card"]:hover {
-  box-shadow: 2px 2px 0 0 oklch(0.279 0.041 260.031) !important;
+  box-shadow: 2px 2px 0 0 var(--border) !important;
   transform: translate(2px, 2px);
 }
 
 [data-theme="neobrutalism"] a > [data-slot="card"]:active {
-  box-shadow: 0 0 0 0 oklch(0.279 0.041 260.031) !important;
+  box-shadow: 0 0 0 0 var(--border) !important;
   transform: translate(4px, 4px);
 }
 
@@ -158,186 +182,259 @@
 [data-theme="neobrutalism"] .prose img,
 [data-theme="neobrutalism"] article img,
 [data-theme="neobrutalism"] header + .relative img {
-  border: 2px solid oklch(0.279 0.041 260.031);
-  border-radius: 2px !important;
+  border: 2px solid var(--border);
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 0 var(--border);
 }
 
-/* Article cover wrapper */
+/* Article cover wrapper — shadow on wrapper since overflow:hidden clips img shadow */
 [data-theme="neobrutalism"] header + .relative.overflow-hidden {
-  border-radius: 2px !important;
+  border: 2px solid var(--border);
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 0 var(--border);
+}
+[data-theme="neobrutalism"] header + .relative.overflow-hidden img {
+  box-shadow: none !important;
+  border: none !important;
 }
 
-/* TOC block */
-[data-theme="neobrutalism"] nav:has(> ol) {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 2px !important;
+/* TOC block (only the ToC nav, not breadcrumbs) */
+[data-theme="neobrutalism"] nav:has(> button + ol) {
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 0 var(--border);
+  background-color: var(--card) !important;
+  padding: 1rem !important;
 }
 
-/* Buttons */
+/* Breadcrumbs on article/public pages */
+[data-theme="neobrutalism"] nav[aria-label="Навигация"] {
+  border: 2px solid var(--border);
+  border-radius: 0 !important;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--card);
+  box-shadow: 4px 4px 0 0 var(--border);
+}
+
+/* Buttons — all variants get brutalist treatment */
 [data-theme="neobrutalism"] [data-slot="button"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 6px !important;
-  box-shadow: 3px 3px 0 0 oklch(0.279 0.041 260.031);
-  transition: box-shadow 0.1s ease, transform 0.1s ease;
+  border: 1.5px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 0 var(--border);
+  transition: all 0.15s ease;
 }
 
 [data-theme="neobrutalism"] [data-slot="button"]:hover {
-  box-shadow: 2px 2px 0 0 oklch(0.279 0.041 260.031);
-  transform: translate(1px, 1px);
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  box-shadow: 2px 2px 0 0 var(--border);
+  transform: translate(2px, 2px);
 }
 
 [data-theme="neobrutalism"] [data-slot="button"]:active {
-  box-shadow: 0 0 0 0 oklch(0.279 0.041 260.031);
-  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 0 var(--border);
+  transform: translate(4px, 4px);
 }
 
-/* Ghost & link buttons — no heavy borders, but still squared */
+/* Ghost & link buttons — border + shadow on hover only */
 [data-theme="neobrutalism"] [data-slot="button"][data-variant="ghost"],
 [data-theme="neobrutalism"] [data-slot="button"][data-variant="link"] {
-  border: none !important;
-  box-shadow: none !important;
-  transform: none !important;
-  border-radius: 4px !important;
+  border: 1.5px solid transparent !important;
+  box-shadow: none;
+  border-radius: 0 !important;
+}
+
+[data-theme="neobrutalism"] [data-slot="button"][data-variant="ghost"]:hover,
+[data-theme="neobrutalism"] [data-slot="button"][data-variant="link"]:hover {
+  border-color: var(--border) !important;
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  box-shadow: 2px 2px 0 0 var(--border);
+  transform: translate(0);
 }
 
 /* Badges */
 [data-theme="neobrutalism"] [data-slot="badge"] {
-  border: 1.5px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
-  box-shadow: 1.5px 1.5px 0 0 oklch(0.279 0.041 260.031);
+  border: 1.5px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 1.5px 1.5px 0 0 var(--border);
+  transition: all 0.15s ease;
+}
+
+[data-theme="neobrutalism"] a [data-slot="badge"]:hover,
+[data-theme="neobrutalism"] [data-slot="badge"]:hover {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
 }
 
 /* Inputs & Textareas */
 [data-theme="neobrutalism"] [data-slot="input"],
 [data-theme="neobrutalism"] [data-slot="textarea"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
 }
 
 /* Select */
 [data-theme="neobrutalism"] [data-slot="select-trigger"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
 }
 
 [data-theme="neobrutalism"] [data-slot="select-content"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
-  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 0 var(--border) !important;
 }
 
 /* Dialogs & Sheets */
 [data-theme="neobrutalism"] [data-slot="dialog-content"],
 [data-theme="neobrutalism"] [data-slot="sheet-content"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 6px !important;
-  box-shadow: 6px 6px 0 0 oklch(0.279 0.041 260.031) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 6px 6px 0 0 var(--border) !important;
 }
 
 /* Popovers & Dropdown menus */
 [data-theme="neobrutalism"] [data-slot="popover-content"],
 [data-theme="neobrutalism"] [data-slot="dropdown-menu-content"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
-  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 0 var(--border) !important;
 }
 
 /* Switch */
 [data-theme="neobrutalism"] [data-slot="switch"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border: 2px solid var(--border) !important;
 }
 
 /* Checkbox */
 [data-theme="neobrutalism"] [data-slot="checkbox"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
+  border: 2px solid var(--border) !important;
   border-radius: 2px !important;
 }
 
 /* Alert Dialog */
 [data-theme="neobrutalism"] [data-slot="alert-dialog-content"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 6px !important;
-  box-shadow: 6px 6px 0 0 oklch(0.279 0.041 260.031) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 6px 6px 0 0 var(--border) !important;
 }
 
-/* Hero banner ads — wrapper + inner inline-styled div */
+/* Hero banner ads — brutalist box */
 [data-theme="neobrutalism"] [data-slot="ad-banner-hero"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
-  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
-  overflow: visible !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 0 var(--border) !important;
+  overflow: hidden !important;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+[data-theme="neobrutalism"] [data-slot="ad-banner-hero"]:hover {
+  box-shadow: 2px 2px 0 0 var(--border) !important;
+  transform: translate(2px, 2px);
 }
 
 [data-theme="neobrutalism"] [data-slot="ad-banner-hero"] > div {
   border-radius: 0 !important;
 }
 
-/* Useful links & attachment items (a.rounded-lg with border) */
+/* Hero banner inner button (inline-styled ads) */
+[data-theme="neobrutalism"] [data-slot="ad-banner-hero"] a,
+[data-theme="neobrutalism"] [data-slot="ad-banner-hero"] [class*="rounded"] {
+  border-radius: 0 !important;
+}
+
+/* Sidebar ad card */
+[data-theme="neobrutalism"] [data-slot="ad-banner-sidebar"] [data-slot="card"] {
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+[data-theme="neobrutalism"] [data-slot="ad-banner-sidebar"]:hover [data-slot="card"] {
+  box-shadow: 2px 2px 0 0 var(--border) !important;
+  transform: translate(2px, 2px);
+}
+
+/* Useful links & attachment items — card-like style */
 [data-theme="neobrutalism"] a.rounded-lg.border {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
-  box-shadow: 3px 3px 0 0 oklch(0.279 0.041 260.031);
-  transition: box-shadow 0.1s ease, transform 0.1s ease, background-color 0.15s;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 0 var(--border);
+  background-color: var(--card) !important;
+  transition: all 0.15s ease;
 }
 
 [data-theme="neobrutalism"] a.rounded-lg.border:hover {
-  box-shadow: 2px 2px 0 0 oklch(0.279 0.041 260.031);
-  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 0 var(--border);
+  transform: translate(2px, 2px);
+  background-color: var(--card) !important;
+}
+
+[data-theme="neobrutalism"] a.rounded-lg.border:hover p.font-medium {
+  color: var(--primary) !important;
 }
 
 /* Icon circles inside link items */
 [data-theme="neobrutalism"] a.rounded-lg.border .rounded-lg.bg-primary\/10 {
-  border: 1.5px solid oklch(0.279 0.041 260.031);
-  border-radius: 4px !important;
+  border: 1.5px solid var(--border);
+  border-radius: 0 !important;
 }
 
 /* Stat counters on hero (white/10 bg blocks) */
 [data-theme="neobrutalism"] .rounded-xl.bg-white\/10 {
   border: 2px solid rgba(255,255,255,0.3) !important;
-  border-radius: 4px !important;
+  border-radius: 0 !important;
 }
 
 /* ---- Inline-HTML ad CTA buttons ---- */
 /* Square off ALL rounded elements inside ads */
 [data-theme="neobrutalism"] [data-slot="ad-banner-hero"] [style*="border-radius"],
 [data-theme="neobrutalism"] [data-slot="ad-banner-sidebar"] [style*="border-radius"] {
-  border-radius: 4px !important;
+  border-radius: 0 !important;
 }
 
 /* Pill-shaped CTA buttons — add neobrutalism border & shadow */
 [data-theme="neobrutalism"] [data-slot="ad-banner-hero"] [style*="9999px"],
 [data-theme="neobrutalism"] [data-slot="ad-banner-sidebar"] [style*="9999px"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
-  box-shadow: 2px 2px 0 0 oklch(0.279 0.041 260.031);
-}
-
-/* Sidebar ad card */
-[data-theme="neobrutalism"] [data-slot="ad-banner-sidebar"] [data-slot="card"] {
-  border: 2px solid oklch(0.279 0.041 260.031) !important;
-  border-radius: 4px !important;
-  box-shadow: 4px 4px 0 0 oklch(0.279 0.041 260.031) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 2px 2px 0 0 var(--border);
 }
 
 /* ---- Header & Footer ---- */
 [data-theme="neobrutalism"] header {
-  border-bottom: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-bottom: 2px solid var(--border) !important;
 }
 
 [data-theme="neobrutalism"] footer {
-  border-top: 2px solid oklch(0.279 0.041 260.031) !important;
+  border-top: 2px solid var(--border) !important;
 }
 
-/* Nav links — sharper radius */
+/* Nav links — square */
 [data-theme="neobrutalism"] header nav a,
 [data-theme="neobrutalism"] footer nav a {
-  border-radius: 4px !important;
+  border-radius: 0 !important;
 }
 
-/* Desktop nav active-looking hover */
+/* Desktop nav link hover — coral */
 [data-theme="neobrutalism"] header nav a:hover,
 [data-theme="neobrutalism"] footer nav a:hover {
-  border-color: oklch(0.279 0.041 260.031);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Country selector trigger — solid button, not ghost */
+[data-theme="neobrutalism"] [data-slot="dropdown-menu-trigger"] {
+  border: 1.5px solid var(--border) !important;
+  border-radius: 0 !important;
+  box-shadow: 3px 3px 0 0 var(--border);
+  background-color: var(--card) !important;
+}
+
+[data-theme="neobrutalism"] [data-slot="dropdown-menu-trigger"]:hover {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  box-shadow: 2px 2px 0 0 var(--border);
+  transform: translate(1px, 1px);
 }
 
 /* Country selector trigger */

@@ -14,6 +14,7 @@ import { Loader2 } from "lucide-react"
 import { countrySchema, type CountryFormData } from "@/lib/validators/country"
 import { createCountry, updateCountry } from "@/actions/countries"
 import { generateSlug } from "@/lib/utils"
+import { FileUpload } from "@/components/admin/file-upload"
 
 interface CountryFormProps {
   initialData?: CountryFormData & { id: string }
@@ -38,6 +39,7 @@ export function CountryForm({ initialData }: CountryFormProps) {
       slug: "",
       code: "",
       flag: "",
+      heroImage: null,
       isActive: true,
       sortOrder: 0,
     },
@@ -159,6 +161,17 @@ export function CountryForm({ initialData }: CountryFormProps) {
                 id="flag"
                 {...register("flag")}
                 placeholder="🇺🇸"
+              />
+            </div>
+
+            {/* Hero Image */}
+            <div className="space-y-2 sm:col-span-2">
+              <Label>Фоновое изображение героя</Label>
+              <p className="text-xs text-muted-foreground">Широкое фото страны для шапки. Рекомендуемый размер: 1920x600+</p>
+              <FileUpload
+                value={watch("heroImage")}
+                onChange={(url) => setValue("heroImage", url)}
+                label="Загрузить фон"
               />
             </div>
 

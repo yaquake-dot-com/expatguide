@@ -1,5 +1,5 @@
-export const SITE_NAME = "ExpatGuide"
-export const SITE_DESCRIPTION = "Портал для русскоязычных экспатов за рубежом"
+export const SITE_NAME = "Переехали"
+export const SITE_DESCRIPTION = "Портал для русскоязычных эмигрантов за рубежом"
 
 export const COUNTRY_COOKIE_NAME = "selected_country"
 export const COUNTRY_COOKIE_MAX_AGE = 60 * 60 * 24 * 30 // 30 days

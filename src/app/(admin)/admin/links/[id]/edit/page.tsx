@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { LinkForm } from "@/components/admin/links/link-form"
 import { getLinkById } from "@/actions/links"
 import { getLinkCategories } from "@/actions/link-categories"
@@ -28,6 +29,7 @@ export default async function EditLinkPage({ params }: Props) {
 
   return (
     <div>
+      <BreadcrumbSetter id={link.id} label={link.title} />
       <PageHeader title={`Редактировать: ${link.title}`} />
       <LinkForm
         countries={countries}

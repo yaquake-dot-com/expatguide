@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { SpecialistCategoryForm } from "@/components/admin/specialist-categories/specialist-category-form"
 import { getSpecialistCategoryById } from "@/actions/specialist-categories"
 
@@ -17,6 +18,7 @@ export default async function EditSpecialistCategoryPage({ params }: EditSpecial
 
   return (
     <div>
+      <BreadcrumbSetter id={category.id} label={category.name} />
       <PageHeader title={`Редактировать: ${category.name}`} />
       <SpecialistCategoryForm
         initialData={{

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { AdForm } from "@/components/admin/ads/ad-form"
 import { getAdById } from "@/actions/ads"
 import { getUserCountryScope } from "@/lib/safe-action"
@@ -27,6 +28,7 @@ export default async function EditAdPage({ params }: Props) {
 
   return (
     <div>
+      <BreadcrumbSetter id={ad.id} label={ad.title} />
       <PageHeader title={`Редактировать: ${ad.title}`} />
       <AdForm
         countries={countries}

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
+import { BreadcrumbSetter } from "@/components/admin/breadcrumb-setter"
 import { SpecialistForm } from "@/components/admin/specialists/specialist-form"
 import { getSpecialistById } from "@/actions/specialists"
 import { getUserCountryScope } from "@/lib/safe-action"
@@ -50,6 +51,7 @@ export default async function EditSpecialistPage({ params }: EditSpecialistPageP
 
   return (
     <div>
+      <BreadcrumbSetter id={specialist.id} label={specialist.name} />
       <PageHeader title={`Редактировать: ${specialist.name}`} />
       <SpecialistForm
         countries={countries}
