@@ -1,5 +1,6 @@
 import fs from "fs/promises"
 import path from "path"
+import { randomUUID } from "crypto"
 import {
   S3Client,
   PutObjectCommand,
@@ -50,12 +51,7 @@ async function ensureUploadsDir(subdir: string) {
 
 function generateFileName(originalName: string): string {
   const ext = path.extname(originalName)
-  const base = path.basename(originalName, ext)
-    .replace(/[^a-zA-Z0-9_-]/g, "_")
-    .substring(0, 40)
-  const timestamp = Date.now()
-  const random = Math.random().toString(36).substring(2, 8)
-  return `${base}-${timestamp}-${random}${ext}`
+  return `${randomUUID()}${ext}`
 }
 
 function getMimeType(fileName: string): string {
