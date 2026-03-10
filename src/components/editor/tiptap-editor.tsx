@@ -2,10 +2,12 @@
 
 import { useEditor, EditorContent, type Editor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
+import Link from "@tiptap/extension-link"
 import TextAlign from "@tiptap/extension-text-align"
 import Image from "@tiptap/extension-image"
 import Placeholder from "@tiptap/extension-placeholder"
 import Highlight from "@tiptap/extension-highlight"
+import UnderlineExtension from "@tiptap/extension-underline"
 import { Toggle } from "@/components/ui/toggle"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
@@ -64,11 +66,12 @@ export function TipTapEditor({
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3] },
-        link: {
-          openOnClick: false,
-          HTMLAttributes: { class: "text-primary underline cursor-pointer" },
-        },
       }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: { class: "text-primary underline cursor-pointer" },
+      }),
+      UnderlineExtension,
       Highlight.configure({ multicolor: false }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
@@ -315,15 +318,22 @@ function LinkDialog({ editor }: { editor: Editor }) {
   const [url, setUrl] = useState("")
 
   const handleSetLink = useCallback(() => {
-    if (url) {
+    if (!url) {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run()
+    } else if (editor.state.selection.empty) {
+      // Нет выделенного текста — вставляем URL как текст ссылки
+      editor
+        .chain()
+        .focus()
+        .insertContent(`<a href="${url}">${url}</a>`)
+        .run()
+    } else {
       editor
         .chain()
         .focus()
         .extendMarkRange("link")
         .setLink({ href: url })
         .run()
-    } else {
-      editor.chain().focus().extendMarkRange("link").unsetLink().run()
     }
     setOpen(false)
     setUrl("")
@@ -403,13 +413,19 @@ function ImageDialog({ editor }: { editor: Editor }) {
         body: formData,
       })
 
-      if (!response.ok) throw new Error("Upload failed")
+      if (!response.ok) {
+        if (response.status === 413) {
+          throw new Error("Файл слишком большой. Максимальный размер — 10 МБ")
+        }
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error || `Ошибка загрузки (${response.status})`)
+      }
 
       const data = await response.json()
       editor.chain().focus().setImage({ src: data.url }).run()
       setOpen(false)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Ошибка загрузки изображения")
+      toast.error(error instanceof Error ? error.message : "Не удалось загрузить изображение")
     } finally {
       setIsUploading(false)
     }

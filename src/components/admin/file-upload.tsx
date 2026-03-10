@@ -40,15 +40,19 @@ export function FileUpload({
       })
 
       if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || "Upload failed")
+        if (response.status === 413) {
+          throw new Error("Файл слишком большой. Максимальный размер — 10 МБ")
+        }
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error || `Ошибка загрузки (${response.status})`)
       }
 
       const data = await response.json()
       onChange(data.url)
       toast.success("Файл загружен")
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Ошибка загрузки")
+      const msg = error instanceof Error ? error.message : "Не удалось загрузить файл"
+      toast.error(msg)
     } finally {
       setIsUploading(false)
       if (inputRef.current) inputRef.current.value = ""

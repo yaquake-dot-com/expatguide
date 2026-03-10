@@ -51,7 +51,7 @@ export function Carousel({
 
   return (
     <div className={cn("group/carousel relative", className)}>
-      <div ref={emblaRef} className="overflow-hidden">
+      <div ref={emblaRef} className="overflow-hidden -mr-4 pr-4">
         <div className="-ml-4 flex items-stretch pb-2">
           {Array.isArray(children)
             ? children.map((child, i) => (

@@ -39,13 +39,12 @@ export function TipTapRenderer({ content, className = "" }: TipTapRendererProps)
 
   // Inject id attributes into headings for TOC anchor links
   const headings = extractHeadings(content)
-  for (const h of headings) {
-    const tag = `h${h.level}`
-    // Escape special regex chars in heading text
-    const escapedText = h.text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-    const regex = new RegExp(`(<${tag})((?:\\s[^>]*)?>\\s*${escapedText})`)
-    html = html.replace(regex, `$1 id="${h.id}"$2`)
-  }
+  let headingIndex = 0
+  html = html.replace(/<(h[23])(\s[^>]*)?>/g, (match, tag, attrs) => {
+    const heading = headings[headingIndex++]
+    if (!heading) return match
+    return `<${tag}${attrs || ""} id="${heading.id}">`
+  })
 
   return (
     <div
